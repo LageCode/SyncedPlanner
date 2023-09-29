@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{% block title %}{% endblock %}</title>
+        {% block links %}{% endblock %}
+        {% block scripts %}{% endblock %}
+        {% load bootstrap5 %}
+        {% bootstrap_css %}
+        {% bootstrap_javascript %}
+    </head>
+
+    <body>
+        <nav class="navbar bg-light">
+            <div class="container">
+                <a class="navbar-brand m-0 h1 {% if '/' == request.path %} active {% endif %}" href="{% url 'index' %}">Planner</a>
+                <form class="d-flex btn-group">
+                    {%  if user.is_authenticated %}
+                        <button class="btn btn-sm btn-danger" type="button" onclick="location.href='{% url 'logout' %}';">Logout</button>
+                    {% else %}
+                        <button class="btn btn-sm btn-primary" type="button" onclick="location.href='{% url 'login' %}';">Login</button>
+                        <button class="btn btn-sm btn-outline-primary" type="button" onclick="location.href='{% url 'register' %}';">Register</button>
+                    {% endif %}
+                </form>
+            </div>
+        </nav>
+
+        <div class="container">
+            <h1 class="my-2">{% block h1 %}{% endblock %}</h1>
+            {% block content %}
+            {% endblock %}
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="fixed-bottom mb-0 alert {% if message.tags %}alert-{{ message.tags }}"{% endif %}>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    </body>
+</html>
